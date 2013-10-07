@@ -26,14 +26,8 @@ node['iptables-ng']['rules'].each do |table, chains|
     # policy is read only, duplicate it
     policy = p.dup
 
-    # Apply chain policy
-    iptables_ng_policy "attribute-policy-#{chain}" do
-      chain  chain
-      table  table
-      policy policy.delete('default')
-    end
-
     # Apply rules
+    policy.delete('default')
     policy.each do |name, rule|
       iptables_ng_rule "#{name}-#{table}-#{chain}-attribute-rule" do
         chain chain
